@@ -71,5 +71,21 @@ namespace MeetupAPI.Controllers
 
 
 
+        [HttpPost]
+        public ActionResult Post([FromBody]MeetupDto model) {
+
+            var meetup = _mapper.Map<Meetup>(model);
+
+            _meetupContext.Meetups.Add(meetup);
+            _meetupContext.SaveChanges();
+
+            //puts the newly created name in the url
+            var key = meetup.name.Replace(" ", "-").ToLower();
+
+            return Created("api/meetup/" + key, null);
+
+        }
+
+
     }
 }
