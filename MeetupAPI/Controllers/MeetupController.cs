@@ -1,5 +1,8 @@
-﻿using MeetupAPI.Entities;
+﻿using AutoMapper;
+using MeetupAPI.Entities;
+using MeetupAPI.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +15,15 @@ namespace MeetupAPI.Controllers
     [Route("api/meetup")]
     public class MeetupController : ControllerBase
     {
-        private MeetupContext _meetupContext { get; }
+        private readonly IMapper _mapper;
+
+        private readonly MeetupContext _meetupContext;
 
         //injecting meetup context (database) through the consturctor 
-        public MeetupController(MeetupContext meetupContext)
+        public MeetupController(MeetupContext meetupContext, IMapper mapper)
         {
             _meetupContext = meetupContext;
+            _mapper = mapper;
         }
 
 
@@ -28,8 +34,9 @@ namespace MeetupAPI.Controllers
 
 
 
-            var meetups = _meetupContext.Meetups.ToList();
+            var meetups = _meetupContext.Meetups.Include(m => m.location).ToList();
 
+            var meetupDtos =   _mapper.Map<List<MeetupDetailsDto>>(meetups);
 
             /*different ways of return status codes*/
 
@@ -37,7 +44,7 @@ namespace MeetupAPI.Controllers
             // return StatusCode(404, meetups);
             // HttpContext.Response.StatusCode = 404;
 
-            return Ok(meetups);
+            return Ok(meetupDtos);
         }
     }
 }

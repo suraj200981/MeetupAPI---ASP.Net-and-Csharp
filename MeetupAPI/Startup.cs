@@ -29,14 +29,14 @@ namespace MeetupAPI
         public void ConfigureServices(IServiceCollection services)
         {
 
+             services.AddSwaggerGen(c =>
+             {
+                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MeetupAPI", Version = "v1" });
+             });
             services.AddControllers();
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "MeetupAPI", Version = "v1" });
-            });
-
             services.AddDbContext<MeetupContext>();
             services.AddScoped<MeetupDataSeeder>();
+            services.AddAutoMapper(this.GetType().Assembly);
 
             //services.AddSingleton<>(); same object will be injected everytime   
             //service.AddScoped new object will be created everytime
