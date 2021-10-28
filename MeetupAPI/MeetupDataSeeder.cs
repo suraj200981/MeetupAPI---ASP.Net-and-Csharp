@@ -59,7 +59,7 @@ namespace MeetupAPI
                  },
 
                 new Meetup {
-                name = "West park",
+                name = "Westpark",
                 date = DateTime.Now.AddDays(7),
                 IsPrivate = true,
                 organiser = "Apple",
